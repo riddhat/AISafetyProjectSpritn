@@ -23,3 +23,10 @@ train_y <- data.matrix(select(train, Salary_USD))
 # Get column names
 col_names <- colnames(ai_jobs)
 print(col_names)
+
+summary(ai_jobs)
+
+med_sal <- median(ai_jobs$Salary_USD, na.rm=TRUE)
+
+ai_jobs$Salary_USD <- ifelse(ai_jobs$Salary_USD >= med_sal, 1, 0)
+
