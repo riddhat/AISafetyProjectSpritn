@@ -12,3 +12,7 @@ head(ai_jobs)
 # Get column names
 col_names <- colnames(ai_jobs)
 print(col_names)
+
+summary(ai_jobs)
+
+median(ai_jobs$Salary_USD, na.rm=TRUE)
