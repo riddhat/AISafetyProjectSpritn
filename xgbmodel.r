@@ -2,6 +2,7 @@
 library(tidyverse)
 library(caret)
 library(xgboost)
+library(shapviz)
 
 # Read data
 ai_jobs <- read.csv("ai_job_market_insights.csv")
