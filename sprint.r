@@ -1,61 +1,56 @@
 library(tidyverse)
-library(caret) #maching learning library
-library(xgboost) #XGBoost library
-library(mltools)
-library(ggplot2)
+library(caret)
+library(xgboost)
 
 ai_jobs <- read.csv("ai_job_market_insights.csv")
 
-head(ai_jobs)
-
-# Get column names
-col_names <- colnames(ai_jobs)
-print(col_names)
-
-summary(ai_jobs)
-
-
-# Get column names
-col_names <- colnames(ai_jobs)
-print(col_names)
-
-summary(ai_jobs)
-
-
+# Convert Salary_USD based on the median value
 med_sal <- median(ai_jobs$Salary_USD, na.rm = TRUE)
-
 ai_jobs$Salary_USD <- ifelse(ai_jobs$Salary_USD >= med_sal, ">= median($91k)", "< median ($91k)")
-
 ai_jobs <- ai_jobs %>% mutate_all(as.factor)
 
-#We set the seed so the randomization can be reproducible
+# Split the data into training and testing sets
 set.seed(123)
-
-#Split the data to testing and training sets
 split <- createDataPartition(ai_jobs$Salary_USD, p = 0.75, list = FALSE)
 train <- ai_jobs[split, ]
 test <- ai_jobs[-split, ]
 
-train_x <- as.matrix(select(train, -Salary_USD)) #train on every other variable except Salary
-train_y <- as.matrix(select(train, Salary_USD))  #response variable matrix
+# Use model.matrix to convert predictors to numeric matrix
+train_x <- model.matrix(~ . - Salary_USD, data = train)[, -1]
+test_x <- model.matrix(~ . - Salary_USD, data = test)[, -1]
 
-test_x <- as.matrix(select(test, -Salary_USD))
-test_y <- as.matrix(select(test, Salary_USD))
+# For classification, use the factor vector directly
+train_y <- train$Salary_USD
+test_y <- test$Salary_USD
 
-xgb_train <- xgb.DMatrix(data = train_x, label = train_y)
-xgb_test <- xgb.DMatrix(data = test_x, label = test_y)
-
-head(ai_jobs)
-head(train_x)
-
-
-#Doing XGBoost for classification purposes
+# Define grid for tuning
 grid_tune <- expand.grid(
-    nrounds = c(500, 1000, 1500), #number of trees
-    max_depth = c(2, 4, 6),
-    eta = 0.3, #learning rate
-    gamma = 0, #default, larger the gamma, the more conservative
-    colsample_bytree = 1, #subsample ratio of columns for tree
-    min_child_weight = 1, #the larger the more conversative
-    subsample = 1
+  nrounds = c(500, 1000, 1500),
+  max_depth = c(2, 3, 4),
+  eta = 0.3,
+  gamma = 0,
+  colsample_bytree = 1,
+  min_child_weight = 1,
+  subsample = 1
 )
+
+# Set up trainControl
+train_control <- trainControl(
+  method = "cv",
+  number = 2,
+  verboseIter = TRUE,
+  allowParallel = TRUE
+)
+
+# Run the tuning process using caret's train function
+xgb_tune <- train(
+  x = train_x,
+  y = train_y,
+  trControl = train_control,
+  tuneGrid = grid_tune,
+  method = "xgbTree",
+  verbose = TRUE
+)
+
+# Inspect the tuned model
+print(xgb_tune)
