@@ -21,8 +21,8 @@ split <- createDataPartition(ai_jobs$Salary_USD, p = 0.75, list = FALSE)
 train <- ai_jobs[split, ]
 test <- ai_jobs[-split, ]
 
-train_x <- data.matrix(select(train, -Salary_USD))
-train_y <- data.matrix(select(train, Salary_USD))
+train_x <- data.matrix(select(train, -Salary_USD)) #train on every other variable except Salary
+train_y <- data.matrix(select(train, Salary_USD))  
 
 
 # Get column names
