@@ -24,7 +24,7 @@ summary(ai_jobs)
 
 med_sal <- median(ai_jobs$Salary_USD, na.rm = TRUE)
 
-ai_jobs$Salary_USD <- ifelse(ai_jobs$Salary_USD >= med_sal, 1, 0)
+ai_jobs$Salary_USD <- ifelse(ai_jobs$Salary_USD >= med_sal, ">= median($91k)", "< median ($91k)")
 
 
 #We set the seed so the randomization can be reproducible
@@ -39,4 +39,4 @@ train_x <- data.matrix(select(train, -Salary_USD)) #train on every other variabl
 train_y <- data.matrix(select(train, Salary_USD))  #response variable matrix
 
 head(ai_jobs)
-table(train_x)
+head(train_x)
