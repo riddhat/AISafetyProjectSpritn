@@ -48,3 +48,14 @@ xgb_test <- xgb.DMatrix(data = test_x, label = test_y)
 head(ai_jobs)
 head(train_x)
 
+
+#Doing XGBoost for classification purposes
+grid_tune <- expand.grid(
+    nrounds = c(500, 1000, 1500), #number of trees
+    max_depth = c(2, 4, 6),
+    eta = 0.3, #learning rate
+    gamma = 0, #default, larger the gamma, the more conservative
+    colsample_bytree = 1, #subsample ratio of columns for tree
+    min_child_weight = 1, #the larger the more conversative
+    subsample = 1
+)
