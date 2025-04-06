@@ -8,6 +8,13 @@ ai_jobs <- read.csv("ai_job_market_insights.csv")
 
 head(ai_jobs)
 
+# Get column names
+col_names <- colnames(ai_jobs)
+print(col_names)
+
+summary(ai_jobs)
+
+
 med_sal <- median(ai_jobs$Salary_USD)
 
 ai_jobs$Salary_USD <- ifelse(ai_jobs$Salary_USD >= med_sal, ">=median salary($91k)", "<median salary($91k)")
@@ -24,9 +31,4 @@ test <- ai_jobs[-split, ]
 train_x <- data.matrix(select(train, -Salary_USD)) #train on every other variable except Salary
 train_y <- data.matrix(select(train, Salary_USD))  
 
-
-# Get column names
-col_names <- colnames(ai_jobs)
-print(col_names)
-
-summary(ai_jobs)
+head(train_y)
