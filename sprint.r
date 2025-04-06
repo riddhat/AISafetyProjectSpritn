@@ -54,3 +54,34 @@ xgb_tune <- train(
 
 # Inspect the tuned model
 print(xgb_tune)
+
+xgb_tune$bestTune
+
+train_control <- trainControl(
+  method = "none",
+  verboseIter = TRUE,
+  allowParallel = TRUE
+)
+
+final_grid <- expand.grid(
+  nrounds = xgb_tune$bestTune$nrounds,
+  max_depth = xgb_tune$bestTune$max_depth,
+  eta =  xgb_tune$bestTune$eta,
+  gamma = xgb_tune$bestTune$gamma,
+  colsample_bytree = xgb_tune$bestTune$colsample_bytree,
+  min_child_weight = xgb_tune$bestTune$min_child_weight,
+  subsample = xgb_tune$bestTune$subsample
+)
+
+xgb_model <- train(
+    x = train_x,
+    y = train_y,
+    trControl = train_control,
+    tuneGrid = final_grid,
+    method = "xgbTree",
+    verbose = TRUE
+)
+
+xgb.pred <- predict(xgb_model, test_x)
+
+confusionMatrix(xgb.pred, test_y)
