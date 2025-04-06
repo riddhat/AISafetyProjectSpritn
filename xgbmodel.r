@@ -84,3 +84,14 @@ conf_mat <- confusionMatrix(
 )
 
 print(conf_mat)
+
+shap_obj <- shapviz(xgb_model, X_pred = test_x)
+
+# Two types of Visualizations
+sv_waterfall(shap_obj, row_id = 1)
+sv_force(shap_obj, row_id = 1)
+
+# Three types of variable importance plots
+sv_importance(shap_obj)
+sv_importance(shap_obj, kind = "bar")
+sv_importance(shap_obj, kind = "both", alpha = 0.2, width = 0.2)
