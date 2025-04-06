@@ -29,6 +29,7 @@ train <- ai_jobs[split, ]
 test <- ai_jobs[-split, ]
 
 train_x <- data.matrix(select(train, -Salary_USD)) #train on every other variable except Salary
-train_y <- data.matrix(select(train, Salary_USD))  
+train_y <- data.matrix(select(train, Salary_USD))  #response variable matrix
 
-head(train_y)
+head(ai_jobs)
+table(train_x)
