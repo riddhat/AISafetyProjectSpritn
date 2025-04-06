@@ -10,7 +10,7 @@ head(ai_jobs)
 
 med_sal <- median(ai_jobs$Salary_USD)
 
-ai_jobs$Salary_USD <- ifelse(ai_jobs$Salary_USD >= med_sal, 1, 0)
+ai_jobs$Salary_USD <- ifelse(ai_jobs$Salary_USD >= med_sal, ">=median salary($91k)", "<median salary($91k)")
 
 
 #We set the seed so the randomization can be reproducible
