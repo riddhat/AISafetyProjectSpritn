@@ -38,7 +38,7 @@ dtest  <- xgb.DMatrix(data = test_x, label = test_label)
 # Set up parameters for XGBoost
 params <- list(
   objective = "binary:logistic",  # binary classification
-  eval_metric = "error",          # error rate 
+  eval_metric = "error",          # error rate
   max_depth = 4,
   eta = 0.1,
   gamma = 0,
