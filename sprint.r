@@ -37,7 +37,7 @@ grid_tune <- expand.grid(
 # Set up trainControl
 train_control <- trainControl(
   method = "cv", #cross validation
-  number = 2, #2 folds
+  number = 3, #3 folds
   verboseIter = TRUE,
   allowParallel = TRUE
 )
